@@ -1,0 +1,55 @@
+body {
+  color: #fff;
+  background-color: #4f8bf9;
+}
+
+a.brand {
+  font-size: 32px;
+  color: white;
+  text-decoration: none;
+}
+
+a.menu {
+  font-size: 16px;
+  color: white;
+  text-decoration: none;
+  float: right;
+  margin-left: 12px;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-weight: 400;
+  padding-top: 0.25rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.75rem;
+  line-height: 1.6;
+  background-color: rgb(19, 23, 32);
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+a.menu:hover {
+  border-top-color: rgb(255, 75, 75);
+  color: rgb(255, 75, 75);
+}
+
+.stButton > button {
+  border-radius: 5px;
+  height: 3em;
+  width: 100%;
+}
+
+.appview-container .main .block-container {
+  max-width: 1000px;
+}
