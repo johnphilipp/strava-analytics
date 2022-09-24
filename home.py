@@ -17,6 +17,8 @@ def main():
 
     header()
 
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
     cols = st.columns(3)
     with cols[0]:
         st.markdown(

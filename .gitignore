@@ -1,6 +1,8 @@
 config/
-data/
+data/activities.json
+data/strava_tokens.json
 draft/
 img/
 **/__pycache__/
 .DS_Store
+strava-analytics.code-workspace

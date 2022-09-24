@@ -7,5 +7,4 @@ def map_styles():
 
 
 def activity_types():
-    return ["Run",
-            "Ride"]
+    return ["Run", "Ride", "Walk", "Hike"]
