@@ -1,5 +1,6 @@
 imgkit==1.2.2
 ipython==8.5.0
+kaleido==0.2.1
 matplotlib==3.5.2
 numpy==1.22.4
 pandas==1.4.2
