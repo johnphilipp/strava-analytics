@@ -3,3 +3,4 @@ data/
 draft/
 img/
 **/__pycache__/
+.DS_Store
