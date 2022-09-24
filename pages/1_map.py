@@ -8,21 +8,7 @@ from PIL import Image
 from IPython.display import Image
 from utils import list_options
 from utils.header import header
-
-
-def get_df(type_selected):
-    df = pd.read_json('data/data.json')
-    df = df[["name", "distance", "moving_time", "type", "start_date_local", "achievement_count",
-            "kudos_count", "start_latlng", "average_heartrate", "kilojoules", "total_elevation_gain", "map"]]
-    df = df[df["type"].isin(type_selected)]
-    df[["start_lat", "start_lng"]] = pd.DataFrame(
-        df.start_latlng.tolist(), index=df.index)
-    df[["id", "summary_polyline", "resource_state"]] = pd.DataFrame(
-        df.map.tolist(), index=df.index)
-    df = df.drop(columns=["start_latlng", "map", "id", "resource_state"])
-    df["summary_polyline"] = df["summary_polyline"].apply(
-        lambda x: polyline.decode(x))
-    return df
+from utils.activities import get_activites_from_file
 
 
 def get_single_lat_lng(df, i):
@@ -56,7 +42,8 @@ def main():
     type_selected = st.multiselect("Select activity types",
                                    types_available,
                                    default=types_available)
-    df = get_df(type_selected)
+    df = get_activites_from_file("data/activities.json")
+    df = df = df[df["type"].isin(type_selected)]
 
     # Single
     activities_available = df["name"].values.tolist()  # start_date_local
