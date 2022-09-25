@@ -1,7 +1,12 @@
 import numpy as np
+import pandas as pd
+from io import BytesIO
 import plotly.express as px
+from PIL import Image
+import streamlit as st
 
 
+@st.cache
 def _zoom_center(df):
     """
     Return zoom and center for mapbox
@@ -24,7 +29,7 @@ def _zoom_center(df):
         47.5136, 98.304, 190.0544, 360.0
     ])
 
-    margin = 2.5
+    margin = 2.2
     height = (maxlat - minlat) * margin * 2.0
     width = (maxlon - minlon) * margin
     lon_zoom = np.interp(width, lon_zoom_range, range(20, 0, -1))
@@ -34,14 +39,15 @@ def _zoom_center(df):
     return zoom, center
 
 
-def line_fig(df, map_style_selected):
+@st.cache
+def line_fig(df, map_style_selected, height=500):
     """
     Return plotly map
     """
     fig = px.line_mapbox(df,
                          lat="start_lat",
                          lon="start_lng",
-                         height=500,
+                         height=height,
                          color_discrete_sequence=["fuchsia"])
     zoom, center = _zoom_center(df)
     fig.update_layout(mapbox_style=map_style_selected,
@@ -51,15 +57,82 @@ def line_fig(df, map_style_selected):
     return fig
 
 
+@st.cache
 def heatmap_fig(df, map_style_selected):
     """
     Return plotly map
     """
-    fig = px.density_mapbox(df, lat='start_lat', lon='start_lng', radius=10,
-                            center=dict(lat=30, lon=0), zoom=1)
+    fig = px.density_mapbox(df,
+                            lat='start_lat',
+                            lon='start_lng',
+                            radius=10,
+                            height=500,
+                            center=dict(lat=30, lon=0),
+                            zoom=1)
     zoom, center = _zoom_center(df)
     fig.update_layout(mapbox_style=map_style_selected,
                       mapbox_zoom=zoom,
                       mapbox_center=center,
                       margin={"r": 0, "t": 0, "l": 0, "b": 0})
     return fig
+
+
+@st.cache
+def collage_fig(df, map_style_selected, specs):
+    """
+    Return a collage of size specs["len"] with cropped images of polylines
+    """
+    def _get_single_lat_lng(df, i):
+        """
+        Return df of single activity with only lat lng data
+        """
+        df = df["summary_polyline"].iloc[i]
+        df = pd.DataFrame(df, columns=["start_lat", "start_lng"])
+        return df
+
+    def _get_imgs(df):
+        """
+        Return list with images as bytes
+        """
+        imgs = []
+        for i in range(0, specs["len"]):
+            def get_img(fig, crop=False):
+                img_bytes = fig.to_image(format="png")
+                str_file = BytesIO(img_bytes)
+                if crop == True:
+                    pimg = Image.open(str_file)
+                    left = 0
+                    top = 0
+                    right = 700
+                    bottom = 680
+                    pimg = pimg.crop((left, top, right, bottom))
+                    return pimg
+                return str_file
+
+            single = _get_single_lat_lng(df, i)
+            fig = line_fig(single, map_style_selected, 700)
+            img = get_img(fig, crop=True)
+            imgs.append(img)
+        return imgs
+
+    def _get_collage(imgs, specs):
+        """
+        Return final collage 
+        """
+        collage = Image.new("RGBA",
+                            (specs["wh_all"], specs["wh_all"]),
+                            color=(255, 255, 255, 255))
+        c = 0
+        for i in range(0, specs["wh_all"], specs["wh_single"]):
+            for j in range(0, specs["wh_all"], specs["wh_single"]):
+                photo = imgs[c].convert("RGBA")
+                photo = photo.resize((specs["wh_single"], specs["wh_single"]))
+
+                collage.paste(photo, (j, i))
+                c += 1
+
+        return collage
+
+    imgs = _get_imgs(df)
+    collage = _get_collage(imgs, specs)
+    return collage

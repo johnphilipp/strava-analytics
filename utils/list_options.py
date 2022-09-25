@@ -3,7 +3,8 @@ def map_styles():
             "carto-positron",
             "open-street-map",
             "stamen-terrain",
-            "stamen-watercolor"]
+            "stamen-watercolor",
+            "white-bg"]
 
 
 def activity_types():
