@@ -82,6 +82,8 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
                                      athlete_fname,
                                      athlete_lname,
                                      json_data)
+
+                st.session_state["user_authenticated"] = auth_code
                 # print(json_data)
                 # print(len(json_data))
 
@@ -108,8 +110,6 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
     #     heatmap(df)
     # if menu_selection == "Poster":
     #     poster(df)
-
-    st.session_state["user_authenticated"] = auth_code
 
 else:
     menu_selection = option_menu("Strava Analytics",
