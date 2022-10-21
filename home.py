@@ -88,28 +88,20 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
                 # print(len(json_data))
 
     menu_selection = option_menu("Strava Analytics",
-                                 ["Dashboard", "Heatmap", "Poster"],
+                                 # ["Dashboard", "Heatmap", "Poster"],
+                                 ["Dashboard", "Heatmap"],
                                  menu_icon="bicycle",
-                                 icons=["speedometer", "map", "card-image"])
+                                 icons=["speedometer", "map"])  # icons=["speedometer", "map", "card-image"])
     st.write("#")
 
     if menu_selection == "Dashboard":
         dashboard(df)
     if menu_selection == "Heatmap":
         heatmap(df)
-    if menu_selection == "Poster":
-        poster(df)
-
-    # menu_selection = option_menu("Strava Analytics",
-    #                              ["Dashboard", "Heatmap", "Poster"],
-    #                              menu_icon="bicycle",
-    #                              icons=["speedometer", "map", "card-image"])
-    # if menu_selection == "Dashboard":
-    #     dashboard(df)
-    # if menu_selection == "Heatmap":
-    #     heatmap(df)
     # if menu_selection == "Poster":
     #     poster(df)
+
+    # TODO: Add logout -- kill all states, reboot app
 
 else:
     menu_selection = option_menu("Strava Analytics",
