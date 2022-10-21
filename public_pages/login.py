@@ -4,8 +4,5 @@ from auth.auth import get_authorization_url
 
 
 def login():
-    if st.button("Login and Authorize"):
-        js = "window.location.href = '{}'".format(get_authorization_url())
-        html = '<img src onerror="{}">'.format(js)
-        div = Div(text=html)
-        st.bokeh_chart(div)
+    link = '[Login and Authorize]({})'.format(get_authorization_url())
+    st.markdown(link, unsafe_allow_html=True)
