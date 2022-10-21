@@ -19,6 +19,7 @@ with open("style/style.css") as f:
 
 if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.session_state:
     auth_code = st.experimental_get_query_params()["code"][0]
+    st.experimental_set_query_params()
 
     if "refresh_token" in st.session_state and "access_token" in st.session_state:
         refresh_token = st.session_state["refresh_token"]
@@ -80,15 +81,17 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
             # print(len(json_data))
 
     menu_selection = option_menu("Strava Analytics",
-                                 ["Dashboard", "Heatmap"],
+                                 ["Dashboard", "Heatmap", "Poster"],
                                  menu_icon="bicycle",
-                                 icons=["speedometer", "map"])
+                                 icons=["speedometer", "map", "card-image"])
     st.write("#")
 
     if menu_selection == "Dashboard":
         dashboard(df)
     if menu_selection == "Heatmap":
         heatmap(df)
+    if menu_selection == "Poster":
+        poster(df)
 
     # menu_selection = option_menu("Strava Analytics",
     #                              ["Dashboard", "Heatmap", "Poster"],
