@@ -1,28 +1,21 @@
 from utils.activities import get_activites_from_file
 from utils.fig import collage_fig
 from utils import list_options
-from utils.header import header
 import streamlit as st
 
 
-def main():
-    st.set_page_config(layout="centered", page_icon="📊",
-                       page_title="senty")
-
-    header()
-
+def poster(df):
     # Df
     types_available = list_options.activity_types()
     type_selected = st.multiselect("Select activity types",
                                    types_available,
                                    default=types_available)
-    path = "data/activities_public.json"
-    df = get_activites_from_file(path)
-    df = df = df[df["type"].isin(type_selected)]
+
+    df = df[df["type"].isin(type_selected)]
 
     # Map
     map_style_selected = st.selectbox("Select map style",
-                                      list_options.map_styles(), 0)
+                                      list_options.map_styles_poster(), 0)
 
     # Grid size
     size_selected = st.radio(
@@ -58,4 +51,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    poster()

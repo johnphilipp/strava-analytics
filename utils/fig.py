@@ -6,13 +6,17 @@ from PIL import Image
 import streamlit as st
 
 
-@st.cache
 def _zoom_center(df):
     """
     Return zoom and center for mapbox
     """
+    print("")
+    print("BOOM")
+    print(df)
     lats = df["start_lat"]
     lons = df["start_lng"]
+    print(lats)
+    print(lons)
 
     maxlon, minlon = max(lons), min(lons)
     maxlat, minlat = max(lats), min(lats)
@@ -110,9 +114,10 @@ def collage_fig(df, map_style_selected, specs):
                 return str_file
 
             single = _get_single_lat_lng(df, i)
-            fig = line_fig(single, map_style_selected, 700)
-            img = get_img(fig, crop=True)
-            imgs.append(img)
+            if len(single > 0):
+                fig = line_fig(single, map_style_selected, 700)
+                img = get_img(fig, crop=True)
+                imgs.append(img)
         return imgs
 
     def _get_collage(imgs, specs):
@@ -125,11 +130,13 @@ def collage_fig(df, map_style_selected, specs):
         c = 0
         for i in range(0, specs["wh_all"], specs["wh_single"]):
             for j in range(0, specs["wh_all"], specs["wh_single"]):
-                photo = imgs[c].convert("RGBA")
-                photo = photo.resize((specs["wh_single"], specs["wh_single"]))
+                if c < len(imgs):
+                    photo = imgs[c].convert("RGBA")
+                    photo = photo.resize(
+                        (specs["wh_single"], specs["wh_single"]))
 
-                collage.paste(photo, (j, i))
-                c += 1
+                    collage.paste(photo, (j, i))
+                    c += 1
 
         return collage
 
