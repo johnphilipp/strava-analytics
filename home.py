@@ -1,7 +1,6 @@
 from lib2to3.pgen2.pgen import DFAState
 import streamlit as st
 from streamlit_option_menu import option_menu
-from public_pages.home import home
 from public_pages.login import login
 from private_pages.dashboard import dashboard
 from private_pages.poster import poster
