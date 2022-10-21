@@ -18,67 +18,72 @@ with open("style/style.css") as f:
 #                    page_title="Strava Analytics")
 
 if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.session_state:
-    auth_code = st.experimental_get_query_params()["code"][0]
-    st.experimental_set_query_params()
-
-    if "refresh_token" in st.session_state and "access_token" in st.session_state:
-        refresh_token = st.session_state["refresh_token"]
-        access_token = st.session_state["access_token"]
-        athlete_id = st.session_state["athlete_id"]
-        athlete_fname = st.session_state["athlete_fname"]
-        athlete_lname = st.session_state["athlete_lname"]
-        athlete_image_url = st.session_state["athlete_image_url"]
-
-    else:
-        tokens = get_refresh_token_and_access_token(auth_code)
-        print(tokens)
-        athlete_id = tokens["athlete"]["id"]
-        athlete_fname = tokens["athlete"]["firstname"]
-        athlete_lname = tokens["athlete"]["lastname"]
-        athlete_image_url = tokens["athlete"]["profile"]
-        refresh_token = tokens["refresh_token"]
-        access_token = tokens["access_token"]
-        st.session_state["athlete_id"] = athlete_id
-        st.session_state["athlete_fname"] = athlete_fname
-        st.session_state["athlete_lname"] = athlete_lname
-        st.session_state["athlete_image_url"] = athlete_image_url
-        st.session_state["refresh_token"] = refresh_token
-        st.session_state["access_token"] = access_token
-
-    if "data" in st.session_state:
-        json_data = st.session_state["data"]
+    if "df" in st.session_state:
         df = st.session_state["df"]
+        json_data = st.session_state["data"]
     else:
-        num_activities = 200
-        epoch = ""
-        nested_list = []
-        with st.spinner('Hang tight {}, we are retrieving your activities!'.format(athlete_fname)):
-            for i in range(15):
-                new = get_athlete_activities(
-                    access_token, num_activities, epoch)
-                nested_list.append(new)
+        auth_code = st.experimental_get_query_params()["code"][0]
+        st.experimental_set_query_params()
 
-                if len(new) == 0:
-                    break
-                else:
-                    timestamp_last = new[len(new) - 1]["start_date"]
-                    utc = datetime.strptime(
-                        timestamp_last, "%Y-%m-%dT%H:%M:%SZ")
-                    epoch = str(
-                        int((utc - datetime(1970, 1, 1)).total_seconds()))
+        if "refresh_token" in st.session_state and "access_token" in st.session_state:
+            refresh_token = st.session_state["refresh_token"]
+            access_token = st.session_state["access_token"]
+            athlete_id = st.session_state["athlete_id"]
+            athlete_fname = st.session_state["athlete_fname"]
+            athlete_lname = st.session_state["athlete_lname"]
+            athlete_image_url = st.session_state["athlete_image_url"]
 
-            json_data = [item for sublist in nested_list for item in sublist]
-            df = process_data(json_data)
+        else:
+            tokens = get_refresh_token_and_access_token(auth_code)
+            print(tokens)
+            athlete_id = tokens["athlete"]["id"]
+            athlete_fname = tokens["athlete"]["firstname"]
+            athlete_lname = tokens["athlete"]["lastname"]
+            athlete_image_url = tokens["athlete"]["profile"]
+            refresh_token = tokens["refresh_token"]
+            access_token = tokens["access_token"]
+            st.session_state["athlete_id"] = athlete_id
+            st.session_state["athlete_fname"] = athlete_fname
+            st.session_state["athlete_lname"] = athlete_lname
+            st.session_state["athlete_image_url"] = athlete_image_url
+            st.session_state["refresh_token"] = refresh_token
+            st.session_state["access_token"] = access_token
 
-            st.session_state["data"] = json_data
-            st.session_state["df"] = df
+        if "data" in st.session_state:
+            json_data = st.session_state["data"]
+            df = st.session_state["df"]
+        else:
+            num_activities = 200
+            epoch = ""
+            nested_list = []
+            with st.spinner('Hang tight {}, we are retrieving your activities!'.format(athlete_fname)):
+                for i in range(15):
+                    new = get_athlete_activities(
+                        access_token, num_activities, epoch)
+                    nested_list.append(new)
 
-            db.insert_activities(athlete_id,
-                                 athlete_fname,
-                                 athlete_lname,
-                                 json_data)
-            # print(json_data)
-            # print(len(json_data))
+                    if len(new) == 0:
+                        break
+                    else:
+                        timestamp_last = new[len(new) - 1]["start_date"]
+                        utc = datetime.strptime(
+                            timestamp_last, "%Y-%m-%dT%H:%M:%SZ")
+                        epoch = str(
+                            int((utc - datetime(1970, 1, 1)).total_seconds()))
+
+                json_data = [
+                    item for sublist in nested_list for item in sublist]
+                df = process_data(json_data)
+
+                st.session_state["data"] = json_data
+                st.session_state["df"] = df
+
+                db.insert_activities(athlete_id,
+                                     athlete_fname,
+                                     athlete_lname,
+                                     json_data)
+                # print(json_data)
+                # print(len(json_data))
 
     menu_selection = option_menu("Strava Analytics",
                                  ["Dashboard", "Heatmap", "Poster"],
