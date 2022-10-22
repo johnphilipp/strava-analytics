@@ -47,8 +47,9 @@ def _get_df(path):
     Return modified df of activities
     """
     df = pd.read_json(path)
-    df = df[["name", "distance", "moving_time", "type", "start_date_local", "achievement_count", "kudos_count",
-             "start_latlng", "end_latlng", "average_heartrate", "kilojoules", "total_elevation_gain", "map"]]
+    # df = df[["name", "distance", "moving_time", "type", "start_date_local", "achievement_count", "kudos_count",
+    #          "start_latlng", "end_latlng", "average_heartrate", "kilojoules", "total_elevation_gain", "map"]]
+    df = df[["type", "start_latlng", "end_latlng", "map"]]
     df[["start_lat", "start_lng"]] = pd.DataFrame(
         df.start_latlng.tolist(), index=df.index)
     df[["end_lat", "ent_lng"]] = pd.DataFrame(
