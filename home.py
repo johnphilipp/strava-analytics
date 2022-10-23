@@ -56,7 +56,7 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
             num_activities = 200
             epoch = ""
             nested_list = []
-            with st.spinner('Hang tight {}, we are retrieving your activities!'.format(athlete_fname)):
+            with st.spinner('Hang tight, {}! We are retrieving your activities'.format(athlete_fname)):
                 for i in range(15):
                     new = get_athlete_activities(
                         access_token, num_activities, epoch)
@@ -88,11 +88,11 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
                 # print(len(json_data))
 
     menu_selection = option_menu("Strava Analytics",
-                                 ["Dashboard", "Heatmap", "Poster"],
-                                 #  ["Dashboard", "Heatmap"],
+                                 #  ["Dashboard", "Heatmap", "Poster"],
+                                 ["Dashboard", "Heatmap"],
                                  menu_icon="bicycle",
-                                 #  icons=["speedometer", "map"])
-                                 icons=["speedometer", "map", "card-image"])
+                                 icons=["speedometer", "map"])
+    #  icons=["speedometer", "map", "card-image"])
     st.write("#")
 
     if menu_selection == "Dashboard":
