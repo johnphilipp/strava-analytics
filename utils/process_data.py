@@ -3,11 +3,17 @@ import pandas as pd
 import polyline
 
 
-def process_data(json_data):
+def convert_json_to_df(json_data):
+    """
+    Convert json to df
+    """
+    return pd.json_normalize(json_data)
+
+
+def process_data(df):
     """
     Return modified df of activities
     """
-    df = pd.json_normalize(json_data)
     df = df[["name",
              "distance",
              "moving_time",
@@ -19,14 +25,16 @@ def process_data(json_data):
              "end_latlng",
              "average_heartrate",
              "total_elevation_gain",
-             "map.summary_polyline"]]
+             "map"]]
     df[["start_lat", "start_lng"]] = pd.DataFrame(
         df.start_latlng.tolist(), index=df.index)
     df[["end_lat", "ent_lng"]] = pd.DataFrame(
         df.end_latlng.tolist(), index=df.index)
-    # df = df[~df["map.summary_polyline"].isnull()]
-    # df[["id", "summary_polyline", "resource_state"]] = pd.DataFrame(
-    #     df.map.tolist(), index=df.index)
-    df["summary_polyline"] = df["map.summary_polyline"].apply(
+    df = df[~df["map"].isnull()]
+    df[["id", "summary_polyline", "resource_state"]] = pd.DataFrame(
+        df.map.tolist(), index=df.index)
+    df = df.drop(columns=["start_latlng", "end_latlng",
+                 "map", "id", "resource_state"])
+    df["summary_polyline"] = df["summary_polyline"].apply(
         lambda x: polyline.decode(x))
     return df

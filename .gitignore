@@ -1,6 +1,7 @@
 config/
 data/activities.json
 data/strava_tokens.json
+data/mj.json
 draft/
 img/
 **/__pycache__/

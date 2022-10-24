@@ -2,25 +2,38 @@ from lib2to3.pgen2.pgen import DFAState
 import streamlit as st
 from streamlit_option_menu import option_menu
 from public_pages.login import login
+from public_pages.upload import upload
 from private_pages.dashboard import dashboard
 from private_pages.poster import poster
 from private_pages.heatmap import heatmap
 from auth.auth import get_refresh_token_and_access_token, get_athlete_activities
 from datetime import datetime
-from utils.process_data import process_data
+from utils.process_data import process_data, convert_json_to_df
 from database import db
 
 
 with open("style/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+
 # st.set_page_config(layout="centered", page_icon="🏃‍♀️",
 #                    page_title="Strava Analytics")
 
-if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.session_state:
+print(st.session_state)
+
+if "code" in st.experimental_get_query_params() \
+        or "user_authenticated" in st.session_state \
+        or "json_data" in st.session_state \
+        or "df" in st.session_state:
+
     if "df" in st.session_state:
         df = st.session_state["df"]
-        json_data = st.session_state["data"]
+        print(df.keys())
+    elif "json_data" in st.session_state:
+        json_data = st.session_state["json_data"]
+        df = convert_json_to_df(json_data)
+        df = process_data(json_data)
+        print(df.keys())
     else:
         auth_code = st.experimental_get_query_params()["code"][0]
         st.experimental_set_query_params()
@@ -35,7 +48,6 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
 
         else:
             tokens = get_refresh_token_and_access_token(auth_code)
-            print(tokens)
             athlete_id = tokens["athlete"]["id"]
             athlete_fname = tokens["athlete"]["firstname"]
             athlete_lname = tokens["athlete"]["lastname"]
@@ -49,8 +61,8 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
             st.session_state["refresh_token"] = refresh_token
             st.session_state["access_token"] = access_token
 
-        if "data" in st.session_state:
-            json_data = st.session_state["data"]
+        if "json_data" in st.session_state:
+            json_data = st.session_state["json_data"]
             df = st.session_state["df"]
         else:
             num_activities = 200
@@ -75,7 +87,7 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
                     item for sublist in nested_list for item in sublist]
                 df = process_data(json_data)
 
-                st.session_state["data"] = json_data
+                st.session_state["json_data"] = json_data
                 st.session_state["df"] = df
 
                 db.insert_activities(athlete_id,
@@ -84,15 +96,11 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
                                      json_data)
 
                 st.session_state["user_authenticated"] = auth_code
-                # print(json_data)
-                # print(len(json_data))
 
     menu_selection = option_menu("Strava Analytics",
-                                 #  ["Dashboard", "Heatmap", "Poster"],
-                                 ["Dashboard", "Heatmap"],
+                                 ["Dashboard", "Heatmap", "Poster"],
                                  menu_icon="bicycle",
-                                 icons=["speedometer", "map"])
-    #  icons=["speedometer", "map", "card-image"])
+                                 icons=["speedometer", "map", "card-image"])
     st.write("#")
 
     if menu_selection == "Dashboard":
@@ -106,13 +114,15 @@ if "code" in st.experimental_get_query_params() or 'user_authenticated' in st.se
 
 else:
     menu_selection = option_menu("Strava Analytics",
-                                 ["Login"],
+                                 ["Login", "Upload"],
                                  menu_icon="bicycle",
-                                 icons=["user"])
+                                 icons=["user", "upload"])
 
     st.write("#")
 
     if menu_selection == "Login":
         login()
+    if menu_selection == "Upload":
+        upload()
 
 # Make a cURL request to exchange the authorization code and scope for a refresh token, access token, and access token expiration date (step 7a from the graph).
