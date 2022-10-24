@@ -116,7 +116,7 @@ else:
     menu_selection = option_menu("Strava Analytics",
                                  ["Login", "Upload"],
                                  menu_icon="bicycle",
-                                 icons=["user", "upload"])
+                                 icons=["person-check-fill", "upload"])
 
     st.write("#")
 

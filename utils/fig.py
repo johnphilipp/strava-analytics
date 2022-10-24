@@ -10,13 +10,8 @@ def _zoom_center(df):
     """
     Return zoom and center for mapbox
     """
-    print("")
-    print("BOOM")
-    print(df)
     lats = df["start_lat"]
     lons = df["start_lng"]
-    print(lats)
-    print(lons)
 
     maxlon, minlon = max(lons), min(lons)
     maxlat, minlat = max(lats), min(lats)
@@ -125,11 +120,11 @@ def collage_fig(df, map_style_selected, specs):
         Return final collage 
         """
         collage = Image.new("RGBA",
-                            (specs["wh_all"], specs["wh_all"]),
+                            (specs["w"], specs["h"]),
                             color=(255, 255, 255, 255))
         c = 0
-        for i in range(0, specs["wh_all"], specs["wh_single"]):
-            for j in range(0, specs["wh_all"], specs["wh_single"]):
+        for i in range(0, specs["h"], specs["wh_single"]):
+            for j in range(0, specs["w"], specs["wh_single"]):
                 if c < len(imgs):
                     photo = imgs[c].convert("RGBA")
                     photo = photo.resize(
