@@ -85,7 +85,8 @@ if "code" in st.experimental_get_query_params() \
 
                 json_data = [
                     item for sublist in nested_list for item in sublist]
-                df = process_data(json_data)
+                df = convert_json_to_df(json_data)
+                df = process_data(df)
 
                 st.session_state["json_data"] = json_data
                 st.session_state["df"] = df

@@ -1,3 +1,4 @@
+from xml.etree.ElementTree import QName
 import numpy as np
 import pandas as pd
 from io import BytesIO
@@ -28,7 +29,7 @@ def _zoom_center(df):
         47.5136, 98.304, 190.0544, 360.0
     ])
 
-    margin = 2.2
+    margin = 2
     height = (maxlat - minlat) * margin * 2.0
     width = (maxlon - minlon) * margin
     lon_zoom = np.interp(width, lon_zoom_range, range(20, 0, -1))
@@ -39,7 +40,7 @@ def _zoom_center(df):
 
 
 @st.cache
-def line_fig(df, map_style_selected, height=500):
+def line_fig(df, map_style_selected, line_color, line_thickness, height=500):
     """
     Return plotly map
     """
@@ -47,19 +48,21 @@ def line_fig(df, map_style_selected, height=500):
                          lat="start_lat",
                          lon="start_lng",
                          height=height,
-                         color_discrete_sequence=["fuchsia"])
+                         color_discrete_sequence=px.colors.qualitative.Set1)
     zoom, center = _zoom_center(df)
     fig.update_layout(mapbox_style=map_style_selected,
                       mapbox_zoom=zoom,
                       mapbox_center=center,
                       margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    # color="Black",
+    fig.update_traces(line=dict(color=line_color, width=line_thickness))
     return fig
 
 
 @st.cache
 def heatmap_fig(df, map_style_selected):
     """
-    Return plotly map
+    Return plotly heatmap
     """
     fig = px.density_mapbox(df,
                             lat='start_lat',
@@ -77,7 +80,7 @@ def heatmap_fig(df, map_style_selected):
 
 
 @st.cache
-def collage_fig(df, map_style_selected, specs):
+def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
     """
     Return a collage of size specs["len"] with cropped images of polylines
     """
@@ -110,7 +113,8 @@ def collage_fig(df, map_style_selected, specs):
 
             single = _get_single_lat_lng(df, i)
             if len(single > 0):
-                fig = line_fig(single, map_style_selected, 700)
+                fig = line_fig(single, map_style_selected,
+                               line_color, line_thickness, 700)
                 img = get_img(fig, crop=True)
                 imgs.append(img)
         return imgs
