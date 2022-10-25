@@ -66,10 +66,11 @@ if "code" in st.experimental_get_query_params() \
             df = st.session_state["df"]
         else:
             num_activities = 200
-            epoch = ""
+            now = datetime.now().strptime("%Y-%m-%dT%H:%M:%SZ")
+            epoch = str(int(now.total_seconds()))
             nested_list = []
             with st.spinner('Hang tight, {}! We are retrieving your activities'.format(athlete_fname)):
-                for i in range(15):
+                for i in range(15):  # while len(new) != 0
                     new = get_athlete_activities(
                         access_token, num_activities, epoch)
                     nested_list.append(new)
@@ -78,6 +79,7 @@ if "code" in st.experimental_get_query_params() \
                         break
                     else:
                         timestamp_last = new[len(new) - 1]["start_date_local"]
+                        st.write(len(new))
                         st.write(timestamp_last)
                         utc = datetime.strptime(
                             timestamp_last, "%Y-%m-%dT%H:%M:%SZ")
