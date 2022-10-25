@@ -87,6 +87,8 @@ if "code" in st.experimental_get_query_params() \
                     item for sublist in nested_list for item in sublist]
                 df = convert_json_to_df(json_data)
                 df = process_data(df)
+                st.write("DF fresh:")
+                st.dataframe(df)
 
                 st.session_state["json_data"] = json_data
                 st.session_state["df"] = df
