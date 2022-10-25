@@ -78,6 +78,7 @@ if "code" in st.experimental_get_query_params() \
                         break
                     else:
                         timestamp_last = new[len(new) - 1]["start_date_local"]
+                        st.write(timestamp_last)
                         utc = datetime.strptime(
                             timestamp_last, "%Y-%m-%dT%H:%M:%SZ")
                         epoch = str(
