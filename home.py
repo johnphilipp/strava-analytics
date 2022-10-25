@@ -66,7 +66,7 @@ if "code" in st.experimental_get_query_params() \
             df = st.session_state["df"]
         else:
             num_activities = 200
-            now = datetime.datetime.now()
+            now = datetime.now()
             utc = datetime.strptime(now, "%Y-%m-%dT%H:%M:%S")
             epoch = str(int((utc - datetime(1970, 1, 1)).total_seconds()))
             nested_list = []
