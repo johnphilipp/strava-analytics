@@ -79,8 +79,6 @@ if "code" in st.experimental_get_query_params() \
                         break
                     else:
                         timestamp_last = new[len(new) - 1]["start_date_local"]
-                        st.write(len(new))
-                        st.write(timestamp_last)
                         utc = datetime.strptime(
                             timestamp_last, "%Y-%m-%dT%H:%M:%SZ")
                         epoch = str(
@@ -90,8 +88,6 @@ if "code" in st.experimental_get_query_params() \
                     item for sublist in nested_list for item in sublist]
                 df = convert_json_to_df(json_data)
                 df = process_data(df)
-                st.write("DF fresh:")
-                st.dataframe(df)
 
                 st.session_state["json_data"] = json_data
                 st.session_state["df"] = df
@@ -130,5 +126,3 @@ else:
         login()
     if menu_selection == "Upload":
         upload()
-
-# Make a cURL request to exchange the authorization code and scope for a refresh token, access token, and access token expiration date (step 7a from the graph).

@@ -28,8 +28,6 @@ def poster(df):
     size_selected = st.radio(
         "Select poster size", ("3x3", "5x5", "10x10", "20x20", "5x20"))
 
-    st.dataframe(df)
-
     if size_selected == "3x3":
         specs = {"len": 9, "w": 1800, "h": 1800, "wh_single": 600}
         if specs["len"] > len(df):
@@ -38,7 +36,6 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-            st.dataframe(df)
     elif size_selected == "5x5":
         specs = {"len": 25, "w": 2000, "h": 2000, "wh_single": 400}
         if specs["len"] > len(df):
@@ -47,7 +44,6 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-            st.dataframe(df)
     elif size_selected == "10x10":
         specs = {"len": 100, "w": 2500, "h": 2500, "wh_single": 250}
         if specs["len"] > len(df):
@@ -56,7 +52,6 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-            st.dataframe(df)
     elif size_selected == "20x20":
         specs = {"len": 400, "w": 2000, "h": 2000, "wh_single": 100}
         if specs["len"] > len(df):
@@ -65,7 +60,6 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-            st.dataframe(df)
     elif size_selected == "5x20":
         specs = {"len": 50, "w": 2000, "h": 1000, "wh_single": 200}
         if specs["len"] > len(df):
@@ -74,7 +68,6 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-            st.dataframe(df)
 
 
 if __name__ == "__main__":
