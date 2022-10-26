@@ -33,9 +33,9 @@ def get_refresh_token_and_access_token(auth_code):
     return requests.request("POST", rv).json()
 
 
-def get_athlete_activities(access_token, per_page=200, after=""):
+def get_athlete_activities(access_token, per_page=200, before=""):
     """GET request to retrieve athlete activities"""
-    if after == "":
+    if before == "":
         params = {
             "access_token": access_token,
             "per_page": per_page
@@ -43,7 +43,7 @@ def get_athlete_activities(access_token, per_page=200, after=""):
     else:
         params = {
             "access_token": access_token,
-            "after": after,
+            "before": before,
             "per_page": per_page
         }
     values_url = urllib.parse.urlencode(params)
