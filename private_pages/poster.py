@@ -26,7 +26,7 @@ def poster(df):
 
     # Grid size
     size_selected = st.radio(
-        "Select poster size", ("3x3", "5x5", "10x10", "20x20", "5x20"))
+        "Select poster size", ("3x3", "5x5", "5x10", "10x10", "10x20", "20x20"))
 
     if size_selected == "3x3":
         specs = {"len": 9, "w": 1800, "h": 1800, "wh_single": 600}
@@ -44,6 +44,14 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
+    elif size_selected == "5x10":
+        specs = {"len": 50, "w": 2000, "h": 1000, "wh_single": 200}
+        if specs["len"] > len(df):
+            st.warning(
+                "You don't have enough activities to display a " + size_selected)
+        else:
+            st.image(collage_fig(df, map_style_selected,
+                     specs, line_color, line_thickness))
     elif size_selected == "10x10":
         specs = {"len": 100, "w": 2500, "h": 2500, "wh_single": 250}
         if specs["len"] > len(df):
@@ -52,16 +60,16 @@ def poster(df):
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-    elif size_selected == "20x20":
-        specs = {"len": 400, "w": 2000, "h": 2000, "wh_single": 100}
+    elif size_selected == "10x20":
+        specs = {"len": 200, "w": 2000, "h": 1000, "wh_single": 100}
         if specs["len"] > len(df):
             st.warning(
                 "You don't have enough activities to display a " + size_selected)
         else:
             st.image(collage_fig(df, map_style_selected,
                      specs, line_color, line_thickness))
-    elif size_selected == "5x20":
-        specs = {"len": 50, "w": 2000, "h": 1000, "wh_single": 200}
+    elif size_selected == "20x20":
+        specs = {"len": 400, "w": 2000, "h": 2000, "wh_single": 100}
         if specs["len"] > len(df):
             st.warning(
                 "You don't have enough activities to display a " + size_selected)
