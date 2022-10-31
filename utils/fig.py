@@ -1,9 +1,8 @@
-from xml.etree.ElementTree import QName
 import numpy as np
 import pandas as pd
 from io import BytesIO
 import plotly.express as px
-from PIL import Image
+from PIL import Image, ImageOps  
 import streamlit as st
 
 
@@ -54,7 +53,6 @@ def line_fig(df, map_style_selected, line_color, line_thickness, height=500):
                       mapbox_zoom=zoom,
                       mapbox_center=center,
                       margin={"r": 0, "t": 0, "l": 0, "b": 0})
-    # color="Black",
     fig.update_traces(line=dict(color=line_color, width=line_thickness))
     return fig
 
@@ -79,7 +77,7 @@ def heatmap_fig(df, map_style_selected):
     return fig
 
 
-@st.cache
+@st.cache()
 def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
     """
     Return a collage of size specs["len"] with cropped images of polylines
@@ -142,3 +140,7 @@ def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
     imgs = _get_imgs(df)
     collage = _get_collage(imgs, specs)
     return collage
+
+
+def invert_colors(collage_fig):
+    return ImageOps.invert(collage_fig.convert('RGB'))

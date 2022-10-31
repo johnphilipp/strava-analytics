@@ -1,11 +1,10 @@
-from lib2to3.pgen2.pgen import DFAState
 import streamlit as st
 from streamlit_option_menu import option_menu
-from public_pages.login import login
-from public_pages.upload import upload
-from private_pages.dashboard import dashboard
-from private_pages.poster import poster
-from private_pages.heatmap import heatmap
+from pages.public.login import login
+from pages.public.upload import upload
+from pages.private.dashboard import dashboard
+from pages.private.poster import poster
+from pages.private.heatmap import heatmap
 from auth.auth import get_refresh_token_and_access_token, get_athlete_activities
 from datetime import datetime
 from utils.process_data import process_data, convert_json_to_df
