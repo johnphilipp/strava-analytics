@@ -11,7 +11,7 @@ from utils.process_data import process_data, convert_json_to_df
 from database import db
 
 
-with open("style/style.css") as f:
+with open("pages/style/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
@@ -27,12 +27,10 @@ if "code" in st.experimental_get_query_params() \
 
     if "df" in st.session_state:
         df = st.session_state["df"]
-        print(df.keys())
     elif "json_data" in st.session_state:
         json_data = st.session_state["json_data"]
         df = convert_json_to_df(json_data)
         df = process_data(json_data)
-        print(df.keys())
     else:
         auth_code = st.experimental_get_query_params()["code"][0]
         st.experimental_set_query_params()

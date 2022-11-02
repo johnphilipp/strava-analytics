@@ -9,3 +9,5 @@ img/
 strava-analytics.code-workspace
 .streamlit/
 model/
+service/
+tests/
