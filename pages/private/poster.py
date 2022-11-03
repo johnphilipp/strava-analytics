@@ -59,7 +59,7 @@ def poster(df):
         # TODO: Progress bar
         collage_fig = fig.collage_fig(df, map_style_selected, specs, line_color, line_thickness)
         if invert_colors == "Yes":
-            collage_fig = fig.invert_colors(collage_fig)
+            collage_fig = fig.invert_colors_collage(collage_fig)
         st.image(collage_fig)
 
 

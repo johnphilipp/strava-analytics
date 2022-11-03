@@ -39,7 +39,7 @@ def _zoom_center(df):
 
 
 @st.cache
-def line_fig(df, map_style_selected, line_color, line_thickness, height=500):
+def line_fig(df, map_style_selected="white-bg", line_color="Black", line_thickness=20, height=500):
     """
     Return plotly map
     """
@@ -77,12 +77,7 @@ def heatmap_fig(df, map_style_selected):
     return fig
 
 
-@st.cache()
-def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
-    """
-    Return a collage of size specs["len"] with cropped images of polylines
-    """
-    def _get_single_lat_lng(df, i):
+def _get_single_lat_lng(df, i):
         """
         Return df of single activity with only lat lng data
         """
@@ -90,13 +85,8 @@ def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
         df = pd.DataFrame(df, columns=["start_lat", "start_lng"])
         return df
 
-    def _get_imgs(df):
-        """
-        Return list with images as bytes
-        """
-        imgs = []
-        for i in range(0, specs["len"]):
-            def get_img(fig, crop=False):
+
+def get_img(fig, crop=False):
                 img_bytes = fig.to_image(format="png")
                 str_file = BytesIO(img_bytes)
                 if crop == True:
@@ -108,7 +98,19 @@ def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
                     pimg = pimg.crop((left, top, right, bottom))
                     return pimg
                 return str_file
+            
 
+@st.cache()
+def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
+    """
+    Return a collage of size specs["len"] with cropped images of polylines
+    """
+    def _get_imgs(df):
+        """
+        Return list with images as bytes
+        """
+        imgs = []
+        for i in range(0, specs["len"]):
             single = _get_single_lat_lng(df, i)
             if len(single > 0):
                 fig = line_fig(single, map_style_selected,
@@ -142,5 +144,11 @@ def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
     return collage
 
 
-def invert_colors(collage_fig):
+def invert_colors_collage(collage_fig):
     return ImageOps.invert(collage_fig.convert('RGB'))
+
+
+def invert_colors_img(img):
+    img = Image.open(BytesIO(img))
+    img = ImageOps.invert(img.convert('RGB'))
+    return img

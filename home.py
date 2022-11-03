@@ -5,6 +5,7 @@ from pages.public.upload import upload
 from pages.private.dashboard import dashboard
 from pages.private.poster import poster
 from pages.private.heatmap import heatmap
+from pages.private.calendar import calendar
 from auth.auth import get_refresh_token_and_access_token, get_athlete_activities
 from datetime import datetime
 from utils.process_data import process_data, convert_json_to_df
@@ -97,9 +98,9 @@ if "code" in st.experimental_get_query_params() \
                 st.session_state["user_authenticated"] = auth_code
 
     menu_selection = option_menu("Strava Analytics",
-                                 ["Dashboard", "Heatmap", "Poster"],
+                                 ["Dashboard", "Heatmap", "Poster", "Calendar"],
                                  menu_icon="bicycle",
-                                 icons=["speedometer", "map", "card-image"])
+                                 icons=["speedometer", "map", "card-image", "calendar3"])
     st.write("#")
 
     if menu_selection == "Dashboard":
@@ -108,6 +109,8 @@ if "code" in st.experimental_get_query_params() \
         heatmap(df)
     if menu_selection == "Poster":
         poster(df)
+    if menu_selection == "Calendar":
+        calendar(df)
 
     # TODO: Add logout -- kill all states, reboot app
 
