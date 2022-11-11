@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from pages.public.login import login
 from pages.public.upload import upload
+from pages.public.demo import demo
 from pages.private.dashboard import dashboard
 from pages.private.poster import poster
 from pages.private.heatmap import heatmap
@@ -116,9 +117,9 @@ if "code" in st.experimental_get_query_params() \
 
 else:
     menu_selection = option_menu("Strava Analytics",
-                                 ["Login", "Upload"],
+                                 ["Login", "Upload", "Demo"],
                                  menu_icon="bicycle",
-                                 icons=["person-check-fill", "upload"])
+                                 icons=["person-check-fill", "upload", "play"])
 
     st.write("#")
 
@@ -126,3 +127,5 @@ else:
         login()
     if menu_selection == "Upload":
         upload()
+    if menu_selection == "Demo":
+        demo()
