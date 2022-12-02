@@ -2,6 +2,7 @@ from utils import fig
 from utils import list_options
 import streamlit as st
 from pages.private.get_started import get_started
+from utils.switch_page import switch_page
 
 
 def poster(df):
@@ -69,6 +70,15 @@ def main():
         st.write("# Poster Maker")
         df = st.session_state["df"]
         poster(df)
+        st.write("####")
+        if st.button("🏠 Home"):
+            switch_page("home")
+        if st.button("📍 Heatmap Visualizer"):
+            switch_page("heatmap visualizer")
+        if st.button("📅 Calendar Tracker"):
+            switch_page("calendar tracker")
+        if st.button("🔚 Logout.py"):
+            switch_page("logout")
     else:
         get_started()
     with open("pages/style/style.css") as f:

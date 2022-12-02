@@ -3,6 +3,7 @@ import streamlit as st
 from utils import list_options
 from utils.fig import heatmap_fig
 from pages.private.get_started import get_started
+from utils.switch_page import switch_page
 
 
 def get_single_lat_lng(df, i):
@@ -32,6 +33,15 @@ def main():
         st.write("# Heatmap")
         df = st.session_state["df"]
         heatmap(df)
+        st.write("####")
+        if st.button("🏠 Home"):
+            switch_page("home")
+        if st.button("🌌 Poster Maker"):
+            switch_page("poster maker")
+        if st.button("📅 Calendar Tracker"):
+            switch_page("calendar tracker")
+        if st.button("🔚 Logout.py"):
+            switch_page("logout")
     else:
         get_started()
     with open("pages/style/style.css") as f:

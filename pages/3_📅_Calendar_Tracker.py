@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils import fig
 from pages.private.get_started import get_started
+from utils.switch_page import switch_page
 
 
 @st.cache()
@@ -229,6 +230,15 @@ def main():
         df = st.session_state["df"]
         df = df[df["summary_polyline"].map(lambda d: len(d)) > 0]
         calendar(df)
+        st.write("####")
+        if st.button("🏠 Home"):
+            switch_page("home")
+        if st.button("📍 Heatmap Visualizer"):
+            switch_page("heatmap visualizer")
+        if st.button("🌌 Poster Maker"):
+            switch_page("poster maker")
+        if st.button("🔚 Logout.py"):
+            switch_page("logout")
     else:
         get_started()
     with open("pages/style/style.css") as f:

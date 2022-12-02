@@ -7,6 +7,7 @@ from utils.process_data import process_data, convert_json_to_df
 from database import db
 import pandas as pd
 import altair as alt
+from utils.switch_page import switch_page
 
 
 def activities_top(df):
@@ -141,6 +142,15 @@ def main():
         st.write("# Dashboard")
         df = st.session_state["df"]
         dashboard(df)
+        st.write("####")
+        if st.button("📍 Heatmap Visualizer"):
+            switch_page("heatmap visualizer")
+        if st.button("🌌 Poster Maker"):
+            switch_page("poster maker")
+        if st.button("📅 Calendar Tracker"):
+            switch_page("calendar tracker")
+        if st.button("🔚 Logout.py"):
+            switch_page("logout")
     else:
         get_started()
         new_auth()
