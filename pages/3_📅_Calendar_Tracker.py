@@ -1,42 +1,35 @@
 import streamlit as st
 import pandas as pd
-from utils.process_data import process_data
 from utils import fig
-
-
-@st.cache()
-def _modify_df(df):
-    return df
+from pages.private.get_started import get_started
 
 
 @st.cache()
 def _get_imgs(row):
-        df = row["summary_polyline"]
-        df = pd.DataFrame(df, columns=["start_lat", "start_lng"])
-        figure = fig.line_fig(df)
-        img = fig.get_img(figure)
-        # img = fig.invert_colors_img(img)
-        return img.read()
+    df = row["summary_polyline"]
+    df = pd.DataFrame(df, columns=["start_lat", "start_lng"])
+    figure = fig.line_fig(df)
+    img = fig.get_img(figure)
+    # img = fig.invert_colors_img(img)
+    return img.read()
 
 
 def calendar(df):
     # -----------------------------------------------
     # Edit df
     # -----------------------------------------------
-    st.write("# Calendar Tracker")
-    st.write("")
-
     df_years_months = df['start_date_local'].str.split('-', expand=True)
-    df_years_months = df_years_months.rename(columns={df_years_months.columns[0]: 'year', df_years_months.columns[1]: 'month'})
+    df_years_months = df_years_months.rename(
+        columns={df_years_months.columns[0]: 'year', df_years_months.columns[1]: 'month'})
 
     df_days = df_years_months[2].str.split('T', expand=True)
     df_days = df_days.rename(columns={df_days.columns[0]: 'day'})
 
-    df_years_months = df_years_months.iloc[: , :-1]
-    df_days = df_days.iloc[: , :-1]
+    df_years_months = df_years_months.iloc[:, :-1]
+    df_days = df_days.iloc[:, :-1]
 
     df = pd.concat([df, df_years_months, df_days], axis=1, join="inner")
-    df = df.astype({'year':'int', 'month':'int', 'day':'int'})
+    df = df.astype({'year': 'int', 'month': 'int', 'day': 'int'})
 
     year = st.selectbox("Select year", df["year"].unique().tolist())
 
@@ -79,7 +72,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c1.image(img, width=img_width)
         else:
@@ -91,7 +85,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c2.image(img, width=img_width)
         else:
@@ -103,7 +98,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c3.image(img, width=img_width)
         else:
@@ -115,7 +111,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c4.image(img, width=img_width)
         else:
@@ -127,7 +124,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c5.image(img, width=img_width)
         else:
@@ -139,7 +137,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c6.image(img, width=img_width)
         else:
@@ -151,7 +150,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c7.image(img, width=img_width)
         else:
@@ -163,7 +163,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c8.image(img, width=img_width)
         else:
@@ -175,7 +176,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c9.image(img, width=img_width)
         else:
@@ -187,7 +189,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c10.image(img, width=img_width)
         else:
@@ -199,7 +202,8 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c11.image(img, width=img_width)
         else:
@@ -211,12 +215,25 @@ def calendar(df):
     unique = df2['day'].unique()
     for i in range(1, 32):
         if i in unique:
-            index = df2.index[df2['day'] == i].tolist()[0] # TODO: could be multiple activities per day
+            # TODO: could be multiple activities per day
+            index = df2.index[df2['day'] == i].tolist()[0]
             img = df2["img"].iloc[index]
             c12.image(img, width=img_width)
         else:
             c12.markdown(html_str, unsafe_allow_html=True)
 
 
+def main():
+    if "df" in st.session_state:
+        st.write("# Calendar Tracker")
+        df = st.session_state["df"]
+        df = df[df["summary_polyline"].map(lambda d: len(d)) > 0]
+        calendar(df)
+    else:
+        get_started()
+    with open("pages/style/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 if __name__ == "__main__":
-    calendar()
+    main()

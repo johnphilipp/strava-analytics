@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 from utils import list_options
 from utils.fig import heatmap_fig
+from pages.private.get_started import get_started
 
 
 def get_single_lat_lng(df, i):
@@ -11,7 +12,6 @@ def get_single_lat_lng(df, i):
 
 
 def heatmap(df):
-    # Df
     types_available = list_options.activity_types()
     type_selected = st.multiselect("Select activity types",
                                    types_available,
@@ -27,5 +27,16 @@ def heatmap(df):
     st.plotly_chart(fig, use_container_width=True)
 
 
+def main():
+    if "df" in st.session_state:
+        st.write("# Heatmap")
+        df = st.session_state["df"]
+        heatmap(df)
+    else:
+        get_started()
+    with open("pages/style/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 if __name__ == "__main__":
-    heatmap()
+    main()

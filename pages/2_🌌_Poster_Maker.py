@@ -1,7 +1,7 @@
-from utils.activities import get_activites_from_file
 from utils import fig
 from utils import list_options
 import streamlit as st
+from pages.private.get_started import get_started
 
 
 def poster(df):
@@ -19,14 +19,13 @@ def poster(df):
     # Line color
     line_color = st.selectbox(
         "Select line color", ["Black", "Green", "Red"])
-    
+
     # Invert colors
     invert_colors = st.selectbox(
         "Invert colors? (Black background)", ["No", "Yes"])
 
     # Line thickness
-    line_thickness = st.selectbox(
-        "Select line thickness", [1, 2, 5, 10, 20, 30])
+    line_thickness = st.number_input("Select line thickness", 0, 40, 20)
 
     # Grid size
     size_selected = st.radio(
@@ -54,14 +53,27 @@ def poster(df):
         specs = {"len": 1000, "w": 2500, "h": 1000, "wh_single": 50}
 
     if specs["len"] > len(df):
-        st.warning("You don't have enough activities to display a {}".format(size_selected))
+        st.warning(
+            "You don't have enough activities to display a {}".format(size_selected))
     else:
         # TODO: Progress bar
-        collage_fig = fig.collage_fig(df, map_style_selected, specs, line_color, line_thickness)
+        collage_fig = fig.collage_fig(
+            df, map_style_selected, specs, line_color, line_thickness)
         if invert_colors == "Yes":
             collage_fig = fig.invert_colors_collage(collage_fig)
         st.image(collage_fig)
 
 
+def main():
+    if "df" in st.session_state:
+        st.write("# Poster Maker")
+        df = st.session_state["df"]
+        poster(df)
+    else:
+        get_started()
+    with open("pages/style/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 if __name__ == "__main__":
-    poster()
+    main()

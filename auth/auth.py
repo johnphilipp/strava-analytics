@@ -5,7 +5,7 @@ import requests
 
 def get_authorization_url():
     """Generate authorization uri"""
-    app_url = "https://strava.streamlitapp.com"  # http://strava.streamlitapp.com os.getenv('APP_URL', 'http://localhost')
+    app_url = "http://strava.streamlitapp.com"  # http://strava.streamlitapp.com os.getenv('APP_URL', 'http://localhost:8501')
     params = {
         "client_id": toml.load(".streamlit/secrets.toml")["STRAVA_CLIENT_ID"],
         "response_type": "code",
