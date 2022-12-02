@@ -38,7 +38,7 @@ def _zoom_center(df):
     return zoom, center
 
 
-@st.cache
+@st.cache(max_entries=10)
 def line_fig(df, map_style_selected="white-bg", line_color="Black", line_thickness=20, height=500):
     """
     Return plotly map
@@ -57,7 +57,7 @@ def line_fig(df, map_style_selected="white-bg", line_color="Black", line_thickne
     return fig
 
 
-@st.cache
+@st.cache(max_entries=10)
 def heatmap_fig(df, map_style_selected):
     """
     Return plotly heatmap
@@ -100,7 +100,7 @@ def get_img(fig, crop=False):
     return str_file
 
 
-@st.cache()
+@st.cache(max_entries=5)
 def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
     """
     Return a collage of size specs["len"] with cropped images of polylines
