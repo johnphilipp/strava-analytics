@@ -19,6 +19,8 @@ def calendar(df):
     # -----------------------------------------------
     # Edit df
     # -----------------------------------------------
+    df = df[df["summary_polyline"].map(lambda d: len(d)) > 0]
+
     df_years_months = df['start_date_local'].str.split('-', expand=True)
     df_years_months = df_years_months.rename(
         columns={df_years_months.columns[0]: 'year', df_years_months.columns[1]: 'month'})
@@ -228,7 +230,6 @@ def main():
     if "df" in st.session_state:
         st.write("# Calendar Tracker")
         df = st.session_state["df"]
-        df = df[df["summary_polyline"].map(lambda d: len(d)) > 0]
         calendar(df)
         st.write("####")
         if st.button("🏠 Home"):

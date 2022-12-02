@@ -7,9 +7,10 @@ from utils.switch_page import switch_page
 
 def poster(df):
     # Df
-    types_available = list_options.activity_types()
+    df = df[df["summary_polyline"].map(lambda d: len(d)) > 0]
+
     type_selected = st.multiselect(
-        "Select activity types", types_available, default=types_available)
+        "Select activity types", df["type"].unique(), default=df["type"].unique())
 
     df = df[df["type"].isin(type_selected)]
 
