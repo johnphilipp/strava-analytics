@@ -2,7 +2,7 @@
 
 Visualize geo-based Strava activities using Streamlit
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://johnphilipp-strava-analytics-home-t3th5m.streamlitapp.com/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://strava.streamlit.app/)
 
 How to run
 ```
