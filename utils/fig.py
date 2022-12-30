@@ -28,7 +28,7 @@ def _zoom_center(df):
         47.5136, 98.304, 190.0544, 360.0
     ])
 
-    margin = 2
+    margin = 2  # TODO: Add as user input, default 2
     height = (maxlat - minlat) * margin * 2.0
     width = (maxlon - minlon) * margin
     lon_zoom = np.interp(width, lon_zoom_range, range(20, 0, -1))

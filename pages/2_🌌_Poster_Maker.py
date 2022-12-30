@@ -31,10 +31,14 @@ def poster(df):
 
     # Grid size
     size_selected = st.radio(
-        "Select poster size", ("3x3", "5x5", "5x10", "10x10", "10x20", "20x20", "20x40", "20x50", "25x25", "50x20"))
+        "Select poster size", ("3x3", "3x4", "4x3", "5x5", "5x10", "10x10", "10x20", "20x20", "20x40", "20x50", "25x25", "50x20"))
 
     if size_selected == "3x3":
         specs = {"len": 9, "w": 1800, "h": 1800, "wh_single": 600}
+    if size_selected == "3x4":
+        specs = {"len": 12, "w": 1200, "h": 1600, "wh_single": 400}
+    if size_selected == "4x3":
+        specs = {"len": 12, "w": 1600, "h": 1200, "wh_single": 400}
     elif size_selected == "5x5":
         specs = {"len": 25, "w": 2000, "h": 2000, "wh_single": 400}
     elif size_selected == "5x10":
