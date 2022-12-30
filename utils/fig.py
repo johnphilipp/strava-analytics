@@ -6,7 +6,7 @@ from PIL import Image, ImageOps
 import streamlit as st
 
 
-def _zoom_center(df):
+def _zoom_center(df, margin_selected):
     """
     Return zoom and center for mapbox
     """
@@ -28,7 +28,7 @@ def _zoom_center(df):
         47.5136, 98.304, 190.0544, 360.0
     ])
 
-    margin = 2  # TODO: Add as user input, default 2
+    margin = margin_selected
     height = (maxlat - minlat) * margin * 2.0
     width = (maxlon - minlon) * margin
     lon_zoom = np.interp(width, lon_zoom_range, range(20, 0, -1))
@@ -39,7 +39,7 @@ def _zoom_center(df):
 
 
 @st.cache(max_entries=10)
-def line_fig(df, map_style_selected="white-bg", line_color="Black", line_thickness=20, height=500):
+def line_fig(df, map_style_selected="white-bg", margin_selected=2, line_color="Black", line_thickness=20, height=500):
     """
     Return plotly map
     """
@@ -48,7 +48,7 @@ def line_fig(df, map_style_selected="white-bg", line_color="Black", line_thickne
                          lon="start_lng",
                          height=height,
                          color_discrete_sequence=px.colors.qualitative.Set1)
-    zoom, center = _zoom_center(df)
+    zoom, center = _zoom_center(df, margin_selected)
     fig.update_layout(mapbox_style=map_style_selected,
                       mapbox_zoom=zoom,
                       mapbox_center=center,
@@ -101,7 +101,7 @@ def get_img(fig, crop=False):
 
 
 @st.cache(max_entries=5)
-def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
+def collage_fig(df, map_style_selected, margin_selected, specs, line_color, line_thickness):
     """
     Return a collage of size specs["len"] with cropped images of polylines
     """
@@ -113,7 +113,7 @@ def collage_fig(df, map_style_selected, specs, line_color, line_thickness):
         for i in range(0, specs["len"]):
             single = _get_single_lat_lng(df, i)
             if len(single > 0):
-                fig = line_fig(single, map_style_selected,
+                fig = line_fig(single, map_style_selected, margin_selected,
                                line_color, line_thickness, 700)
                 img = get_img(fig, crop=True)
                 imgs.append(img)

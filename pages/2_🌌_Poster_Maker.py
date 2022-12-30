@@ -11,12 +11,20 @@ def poster(df):
 
     type_selected = st.multiselect(
         "Select activity types", df["type"].unique(), default=df["type"].unique())
-
     df = df[df["type"].isin(type_selected)]
+
+    min_distance = st.number_input(
+        "Select minimum distance (in meters, e.g., 10000)", 0, step=1000)
+    df = df[df["distance"] > min_distance]
+
+    # TODO: Add year
 
     # Map
     map_style_selected = st.selectbox(
         "Select map style", list_options.map_styles_poster(), 0)
+
+    # Margin
+    margin_selected = st.selectbox("Select margin", [1.5, 2, 2.5, 3, 3.5], 1)
 
     # Line color
     line_color = st.selectbox(
@@ -64,7 +72,7 @@ def poster(df):
     else:
         # TODO: Progress bar
         collage_fig = fig.collage_fig(
-            df, map_style_selected, specs, line_color, line_thickness)
+            df, map_style_selected, margin_selected, specs, line_color, line_thickness)
         if invert_colors == "Yes":
             collage_fig = fig.invert_colors_collage(collage_fig)
         st.image(collage_fig)
